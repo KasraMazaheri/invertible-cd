@@ -67,7 +67,7 @@ def invert(solver,
            seed=0,
            ):
     solver.init_prompt(prompt)
-    # uncond_embeddings, cond_embeddings = solver.context.chunk(2)
+    uncond_embeddings, cond_embeddings = solver.context.chunk(2)
     register_attention_control(solver.model, None)
     
     if is_cons_inversion:

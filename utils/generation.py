@@ -229,10 +229,10 @@ class Generator:
                 if not isinstance(t, int):
                     t_item = t.item()
                 guidance_scale = linear_schedule_old(t_item, guidance_scale, tau1=tau1, tau2=tau2)  # TODO UPDATE
-            if len(latents_input) == 4:
-                guidance_scale_tensor = torch.tensor([0.0, 0.0, 0.0, guidance_scale])
-            else:
-                guidance_scale_tensor = torch.tensor([guidance_scale] * len(latents_input))
+            # if len(latents_input) == 4:
+            #     guidance_scale_tensor = torch.tensor([0.0, 0.0, 0.0, guidance_scale])
+            # else:
+            guidance_scale_tensor = torch.tensor([guidance_scale] * len(latents_input))
             w_embedding = guidance_scale_embedding(guidance_scale_tensor, embedding_dim=w_embed_dim)
             w_embedding = w_embedding.to(device=latent.device, dtype=latent.dtype)
         else:
@@ -267,9 +267,9 @@ class Generator:
         with torch.no_grad():
             if type(image) is Image:
                 image = np.array(image)
-            if type(image) is torch.Tensor and image.dim() == 4:
-                latents = image
-            elif type(image) is list:
+            # if type(image) is torch.Tensor and image.dim() == 4:
+            #     latents = image
+            if type(image) is list:
                 image = [np.array(i).reshape(1, 512, 512, 3) for i in image]
                 image = np.concatenate(image)
                 image = torch.from_numpy(image).float() / 127.5 - 1
@@ -277,8 +277,10 @@ class Generator:
                 latents = self.model.vae.encode(image)['latent_dist'].mean
                 latents = latents * 0.18215
             else:
-                image = torch.from_numpy(image).float() / 127.5 - 1
-                image = image.permute(2, 0, 1).unsqueeze(0).to(self.model.device, dtype=self.model.dtype)
+                # image = torch.from_numpy(image).float() / 127.5 - 1
+                image = image.float() / 127.5 - 1
+                # image = image.permute(2, 0, 1).unsqueeze(0).to(self.model.device, dtype=self.model.dtype)
+                image = image.to(self.model.vae.device, dtype=self.model.vae.dtype)
                 latents = self.model.vae.encode(image)['latent_dist'].mean
                 latents = latents * 0.18215
         return latents
