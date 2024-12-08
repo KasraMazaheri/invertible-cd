@@ -57,7 +57,7 @@ def invert(solver,
            tau1=0.4,
            tau2=0.6,
            w_embed_dim=0,
-           image_path=None, 
+           image_gt=None,
            prompt='',
            offsets=(0, 0, 0, 0),
            do_nti=False,
@@ -67,12 +67,8 @@ def invert(solver,
            seed=0,
            ):
     solver.init_prompt(prompt)
-    uncond_embeddings, cond_embeddings = solver.context.chunk(2)
+    # uncond_embeddings, cond_embeddings = solver.context.chunk(2)
     register_attention_control(solver.model, None)
-    if isinstance(image_path, list):
-        image_gt = [load_512(path, *offsets) for path in image_path]
-    else:
-        image_gt = load_512(image_path, *offsets)
     
     if is_cons_inversion:
         image_rec, ddim_latents = solver.cons_inversion(image_gt,
@@ -86,15 +82,16 @@ def invert(solver,
                                                         dynamic_guidance=dynamic_guidance,
                                                         tau1=tau1, tau2=tau2, 
                                                         w_embed_dim=w_embed_dim)
-    if do_nti:
-        print("Null-text optimization...")
-        uncond_embeddings = null_optimization(solver,
-                                              ddim_latents,
-                                              nti_guidance_scale,
-                                              num_inner_steps,
-                                              early_stop_epsilon)
-    elif do_npi:
-        uncond_embeddings = [cond_embeddings] * solver.n_steps
-    else:
-        uncond_embeddings = None
-    return (image_gt, image_rec), ddim_latents[-1], uncond_embeddings
+    # if do_nti:
+    #     print("Null-text optimization...")
+    #     uncond_embeddings = null_optimization(solver,
+    #                                           ddim_latents,
+    #                                           nti_guidance_scale,
+    #                                           num_inner_steps,
+    #                                           early_stop_epsilon)
+    # elif do_npi:
+    #     uncond_embeddings = [cond_embeddings] * solver.n_steps
+    # else:
+    #     uncond_embeddings = None
+    # return (image_gt, image_rec), ddim_latents[-1], uncond_embeddings
+    return ddim_latents[-1]

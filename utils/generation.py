@@ -425,7 +425,7 @@ class Generator:
         generator = torch.Generator().manual_seed(seed)
         noise = torch.randn(latent.shape, generator=generator).to(latent.device)
         latent = self.noise_scheduler.add_noise(latent, noise, torch.tensor([self.start_timestep]))
-        image_rec = self.latent2image(latent)
+        # image_rec = self.latent2image(latent)
 
         for i, (t, s) in enumerate(tqdm(zip(self.forward_timesteps, self.forward_boundary_timesteps))):
             # predict the noise residual
@@ -448,7 +448,8 @@ class Generator:
                 sigma_schedule,
             )
 
-        return image_rec, [latent]
+        # return image_rec, [latent]
+        return [latent]
 
     def _create_forward_inverse_timesteps(self,
                                           num_endpoints,
