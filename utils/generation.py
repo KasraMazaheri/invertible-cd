@@ -292,7 +292,7 @@ class Generator:
                 [""], padding="max_length", max_length=self.model.tokenizer.model_max_length,
                 return_tensors="pt"
             )
-            uncond_embeddings = self.model.text_encoder(uncond_input.input_ids.to(self.model.device))[0]
+            uncond_embeddings = self.model.text_encoder(uncond_input.input_ids.to(self.model.text_encoder.device))[0]
         text_input = self.model.tokenizer(
             prompt,
             padding="max_length",
@@ -300,7 +300,7 @@ class Generator:
             truncation=True,
             return_tensors="pt",
         )
-        text_embeddings = self.model.text_encoder(text_input.input_ids.to(self.model.device))[0]
+        text_embeddings = self.model.text_encoder(text_input.input_ids.to(self.model.text_encoder.device))[0]
         self.context = torch.cat([uncond_embeddings.expand(*text_embeddings.shape), text_embeddings])
         self.prompt = prompt
 
@@ -384,14 +384,14 @@ class Generator:
 
         all_latent = [latent]
         latent = latent.clone().detach()
-        alpha_schedule = torch.sqrt(self.model.scheduler.alphas_cumprod).to(self.model.device)
-        sigma_schedule = torch.sqrt(1 - self.model.scheduler.alphas_cumprod).to(self.model.device)
+        alpha_schedule = torch.sqrt(self.model.scheduler.alphas_cumprod).to(self.reverse_cons_model.device)
+        sigma_schedule = torch.sqrt(1 - self.model.scheduler.alphas_cumprod).to(self.reverse_cons_model.device)
 
         for i, (t, s) in enumerate(tqdm(zip(self.reverse_timesteps, self.reverse_boundary_timesteps))):
             noise_pred = self.get_noise_pred(
                 model=self.reverse_cons_model,
                 latent=latent,
-                t=t.to(self.model.device),
+                t=t.to(self.reverse_cons_model.device),
                 context=None,
                 tau1=tau1, tau2=tau2,
                 w_embed_dim=w_embed_dim,
@@ -400,8 +400,8 @@ class Generator:
 
             latent = predicted_origin(
                 noise_pred,
-                torch.tensor([t] * len(latent), device=self.model.device),
-                torch.tensor([s] * len(latent), device=self.model.device),
+                torch.tensor([t] * len(latent), device=self.reverse_cons_model.device),
+                torch.tensor([s] * len(latent), device=self.reverse_cons_model.device),
                 latent,
                 self.model.scheduler.config.prediction_type,
                 alpha_schedule,
@@ -419,8 +419,8 @@ class Generator:
                        guidance_scale=0.0,
                        w_embed_dim=0,
                        seed=0):
-        alpha_schedule = torch.sqrt(self.model.scheduler.alphas_cumprod).to(self.model.device)
-        sigma_schedule = torch.sqrt(1 - self.model.scheduler.alphas_cumprod).to(self.model.device)
+        alpha_schedule = torch.sqrt(self.model.scheduler.alphas_cumprod).to(self.reverse_cons_model.device)
+        sigma_schedule = torch.sqrt(1 - self.model.scheduler.alphas_cumprod).to(self.reverse_cons_model.device)
 
         # 5. Prepare latent variables
         latent = self.image2latent(image)
@@ -434,7 +434,7 @@ class Generator:
             noise_pred = self.get_noise_pred(
                 model=self.forward_cons_model,
                 latent=latent,
-                t=t.to(self.model.device),
+                t=t.to(self.forward_cons_model.device),
                 context=None,
                 guidance_scale=guidance_scale,
                 w_embed_dim=w_embed_dim,
@@ -442,8 +442,8 @@ class Generator:
 
             latent = predicted_origin(
                 noise_pred,
-                torch.tensor([t] * len(latent), device=self.model.device),
-                torch.tensor([s] * len(latent), device=self.model.device),
+                torch.tensor([t] * len(latent), device=self.forward_cons_model.device),
+                torch.tensor([s] * len(latent), device=self.forward_cons_model.device),
                 latent,
                 self.model.scheduler.config.prediction_type,
                 alpha_schedule,

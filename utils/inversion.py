@@ -71,7 +71,7 @@ def invert(solver,
     register_attention_control(solver.model, None)
     
     if is_cons_inversion:
-        image_rec, ddim_latents = solver.cons_inversion(image_gt,
+        ddim_latents = solver.cons_inversion(image_gt,
                                                         w_embed_dim=w_embed_dim,
                                                         guidance_scale=inv_guidance_scale,
                                                         seed=seed,)
