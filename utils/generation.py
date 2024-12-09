@@ -278,7 +278,7 @@ class Generator:
                 latents = latents * 0.18215
             else:
                 # image = torch.from_numpy(image).float() / 127.5 - 1
-                image = image.float() / 127.5 - 1
+                # image = image.float() / 127.5 - 1
                 # image = image.permute(2, 0, 1).unsqueeze(0).to(self.model.device, dtype=self.model.dtype)
                 image = image.to(self.model.vae.device, dtype=self.model.vae.dtype)
                 latents = self.model.vae.encode(image)['latent_dist'].mean
@@ -530,9 +530,9 @@ class Generator:
 def latent2image(vae, latents):
     latents = 1 / 0.18215 * latents
     image = vae.decode(latents)['sample']
-    image = (image / 2 + 0.5).clamp(0, 1)
-    image = image.cpu().permute(0, 2, 3, 1).numpy()
-    image = (image * 255).astype(np.uint8)
+    #image = (image / 2 + 0.5).clamp(0, 1)
+    #image = image.cpu().permute(0, 2, 3, 1).numpy()
+    #image = (image * 255).astype(np.uint8)
     return image
 
 
