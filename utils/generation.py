@@ -419,8 +419,8 @@ class Generator:
                        guidance_scale=0.0,
                        w_embed_dim=0,
                        seed=0):
-        alpha_schedule = torch.sqrt(self.model.scheduler.alphas_cumprod).to(self.reverse_cons_model.device)
-        sigma_schedule = torch.sqrt(1 - self.model.scheduler.alphas_cumprod).to(self.reverse_cons_model.device)
+        alpha_schedule = torch.sqrt(self.model.scheduler.alphas_cumprod).to(self.forward_cons_model.device)
+        sigma_schedule = torch.sqrt(1 - self.model.scheduler.alphas_cumprod).to(self.forward_cons_model.device)
 
         # 5. Prepare latent variables
         latent = self.image2latent(image)
