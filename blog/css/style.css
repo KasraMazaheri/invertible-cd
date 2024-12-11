@@ -1,0 +1,187 @@
+:root {
+    /* Layout and Color Scheme */
+    --background-color: #f5f7fa;
+    --text-color: #2c3e50;
+    --heading-color: #34495e;
+    --link-color: #2980b9;
+    --link-hover-color: #1abc9c;
+    --sidebar-bg-color: #ecf0f1;
+    --header-border-color: #bdc3c7;
+  
+    /* Fonts and Sizes */
+    --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --title-font-size: 2.5em;
+    --caption-font-size: 1.2em;
+    --authors-font-size: 1em;
+    --course-font-size: 1em;
+    --section-heading-size: 1.8em;
+    --subsection-heading-size: 1.4em;
+    --body-font-size: 1em;
+    --references-font-size: 0.9em;
+    
+    /* Layout Dimensions */
+    --sidebar-width: 270px;
+    --content-padding: 30px;
+    --header-padding-bottom: 20px;
+  
+    /* Page Margins for Centering */
+    --page-margin-left: auto;
+    --page-margin-right: auto;
+    --container-max-width: 1200px; /* Adjust as needed */
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    font-size: var(--body-font-size);
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.6;
+  }
+  
+  /* Container to center the entire blog */
+  .container {
+    max-width: var(--container-max-width);
+    margin-left: var(--page-margin-left);
+    margin-right: var(--page-margin-right);
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* Table of Contents (Sidebar) */
+  #toc {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg-color);
+    padding: var(--content-padding);
+    overflow-y: auto;
+    border-right: 1px solid var(--header-border-color);
+  }
+  
+  #toc h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+    color: var(--heading-color);
+  }
+  
+  #toc ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0.5em;
+  }
+  
+  #toc ul ul {
+    margin-left: 1em;
+  }
+  
+  #toc li {
+    margin: 0.5em 0;
+  }
+  
+  #toc a {
+    color: var(--link-color);
+    text-decoration: none;
+  }
+  
+  #toc a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+  }
+  
+  /* Main Content Area */
+  main {
+    flex: 1;
+    padding: var(--content-padding);
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+  
+  header {
+    padding-bottom: var(--header-padding-bottom);
+    border-bottom: 1px solid var(--header-border-color);
+  }
+  
+  header h1 {
+    font-size: var(--title-font-size);
+    margin-bottom: 0.2em;
+    color: var(--heading-color);
+    text-align: left;
+  }
+  
+  header h3 {
+    font-size: var(--caption-font-size);
+    color: #7f8c8d;
+    margin-top: 0;
+    text-align: left;
+  }
+  
+  .authors, .course {
+    font-size: var(--authors-font-size);
+    margin: 0.2em 0;
+    color: #7f8c8d;
+    text-align: left;
+  }
+  
+  section {
+    margin-bottom: 2em;
+  }
+  
+  section h2 {
+    font-size: var(--section-heading-size);
+    color: var(--heading-color);
+    margin-top: 1em;
+    border-bottom: 2px solid var(--header-border-color);
+    padding-bottom: 0.3em;
+    text-align: left;
+  }
+  
+  section h3 {
+    font-size: var(--subsection-heading-size);
+    color: var(--heading-color);
+    margin-top: 1em;
+    text-align: left;
+  }
+  
+  p {
+    margin: 1em 0;
+    text-align: left;
+  }
+  
+  .references {
+    font-size: var(--references-font-size);
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .references li {
+    margin-bottom: 0.5em;
+  }
+  
+  @media (max-width: 1200px) {
+    .container {
+      max-width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    /* Adjust layout for smaller screens */
+    .container {
+      flex-direction: column;
+    }
+  
+    #toc {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--header-border-color);
+    }
+  
+    main {
+      box-shadow: none;
+    }
+  }
+  
+  table { width: 50%; border-collapse: collapse; margin: 20px 0; } table, th, td { border: 1px solid black; } th, td { padding: 8px 12px; text-align: center; } th { background-color: #f2f2f2; }
