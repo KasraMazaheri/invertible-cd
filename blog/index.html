@@ -56,7 +56,12 @@
         <h2>Background &amp; Motivation</h2>
         <p>
           <!-- Background & Motivation content goes here -->
-          Generative diffusion models have become popular for tasks like image synthesis, inpainting, and editing. But beyond generation, they provide latent spaces that can be used to represent and manipulate data. Score-based models connect data space to latent space through a probability flow ODE, a process that is too slow to compute representations at scale for our study, to the point of impracticality. Recently, however, consistency models [7] have emerged as a more efficient method, distilling a diffusion model into a network that can obtain high-quality samples in only a few iterations, enabling fast inference. Similarly, this idea can be used to obtain latents quickly from images, by training a consistency model to solve the ODE in reverse. Indeed, fellow researchers at Yandex trained such an invertible consistency distillation model [8] on the COCO dataset. Through this recent model, we were able to compute the representations for a generative model at scale, which was required to draw any meaningful conclusions from the research.
+          Generative diffusion models have become popular for tasks like image synthesis, inpainting, and editing. But beyond generation, they provide latent spaces that can be used to represent and manipulate data. Score-based models connect data space to latent space through a probability flow ODE, a process that is too slow to compute representations at scale for our study, to the point of impracticality. 
+        </p>
+        <img src="images/SDE.jpg" alt="SDE Trajectories" style="width: 85%;"/>
+        <figcaption style="text-align: center;">Figure 1: Score-based models connecting the data space to the latent space through the probability flow ODE. (Source: [3])</figcaption>
+        <p>
+          Recently, however, consistency models [7] have emerged as a more efficient method, distilling a diffusion model into a network that can obtain high-quality samples in only a few iterations, enabling fast inference. Similarly, this idea can be used to obtain latents quickly from images, by training a consistency model to solve the ODE in reverse. Indeed, fellow researchers at Yandex trained such an invertible consistency distillation model [8] on the COCO dataset. Through this recent model, we were able to compute the representations for a generative model at scale, which was required to draw any meaningful conclusions from the research.
         </p>
         <p>
           The ability to obtain latent representations from diffusion models raises exciting questions: if these latents reflect underlying structure in the data, do they resemble the "universal" representations learned by vision transformers, as predicted by the Platonic Representation Hypothesis [1]? Prior work has shown alignment between large LLMs and vision transformers as they scale. If diffusion-based models share or approach the same "ideal" representation, this would suggest a robust, modality-agnostic structure in learned features.
@@ -150,6 +155,7 @@
           we ran the reverse consistency model on the latents from a small minibatch to verify the latents indeed reconstruct the images, and they were reconstructed at stunning accuracies:
         </p>
         <img src="images/reconstruction.png" alt="Reconstruction of images from ICD latents" />
+        <figcaption style="text-align: center;">Figure 2: Reconstruction of images from ICD latents</figcaption>
 
         <p>
           We then manually investigated the k-nearest-neighbors result for these 4 images, within a batch of size 128. 
@@ -163,6 +169,9 @@
         <img src="images/knn3-2.png"/>
         <img src="images/knn4-1.png"/>
         <img src="images/knn4-2.png"/>
+        <figcaption style="text-align: center;">Figure 3: k-nearest-neighbors according to ICD and DINOv2 representations.
+          We observe semantic alignment in the DINOv2 representations, while the ICD representations show no such alignment with human interpretation.
+        </figcaption>
 
         <p>
           We saw the DINOv2 representations actually carry semantic understanding that aligns with our brains' representations, while the ICD representations are best summarized as “Mahatma Gandhi, and the pancakes, and the dragon, and you” [9].
